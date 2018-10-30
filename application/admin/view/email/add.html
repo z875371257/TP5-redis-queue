@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            {include file="template/form_header" /}
+            <form id="dataForm" class="form-horizontal dataForm" action="" method="post" enctype="multipart/form-data">
+                <div class="box-body">
+                    <div class="fields-group">
+                        {if isset($info)}
+                        <input id="id" name="id" value="{$info.id}" hidden placeholder="请勿修改">
+                        {/if}
+                      
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">公司名称</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-bank"></i></span>
+                                    <input maxlength="20" id="company" name="company" value="{$info.company|default=''}" class="form-control"placeholder="请输入公司名称">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nationality" class="col-sm-2 control-label">国家</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+                                    <input maxlength="20" id="nationality" name="nationality" value="{$info.nationality|default=''}"
+                                           class="form-control" placeholder="请输入国家名称">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="uname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-address-card-o"></i></span>
+                                    <input maxlength="20" id="uname" name="uname" value="{$info.uname|default=''}"
+                                           class="form-control" placeholder="请输入姓名">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="posts" class="col-sm-2 control-label">职务</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
+                                    <input maxlength="20" id="posts" name="posts" value="{$info.posts|default=''}"
+                                           class="form-control" placeholder="请输入职务">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                                    <input maxlength="20" id="email" name="email" value="{$info.email|default=''}"
+                                           class="form-control" placeholder="请输入邮箱">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tel" class="col-sm-2 control-label">电话</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-volume-control-phone"></i></span>
+                                    <input maxlength="20" id="tel" name="tel" value="{$info.tel|default=''}"
+                                           class="form-control" placeholder="请输入电话">
+                                </div>
+                            </div>
+                        </div>
+                      
+
+
+                        <div class="form-group">
+                            <label for="status" class="col-sm-2 control-label">启用</label>
+                            <div class="col-sm-10 col-md-4">
+                                <div class="input-group iconpicker-container">
+                                    <input {if (isset($info) && $info.status==1) || !isset($info)}checked{/if}
+                                    value="{$info.status|default='1'}"
+                                    class="form-input-switch" type="checkbox" placeholder="status-switch"
+                                    data-input="status">
+                                    <input id="status" name="status" value="{$info.status|default='1'}" type="hidden"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {include file="template/form_footer" /}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="__PLUGINS__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__PLUGINS__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">
+    var ue = UE.getEditor('content');
+</script>
