@@ -30,6 +30,10 @@
  * @author Brent R. Matzelle (original founder)
  */
 namespace email;
+
+use email\SMTP;
+use email\phpmailerException;
+
 class PHPMailer
 {
     /**

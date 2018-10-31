@@ -28,7 +28,8 @@
         "overtrue/easy-sms": "1.*",
         "qiniu/php-sdk": "^7.2",
         "lcobucci/jwt": "^3.2",
-        "topthink/think-queue": "^2.0"
+        "topthink/think-queue": "^2.0",
+        "phpmailer/phpmailer": "^6.0"
     },
     "extra": {
         "think-path": "thinkphp"
