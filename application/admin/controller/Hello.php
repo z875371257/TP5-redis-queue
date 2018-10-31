@@ -3,11 +3,13 @@
 namespace app\admin\controller;
 
 use app\admin\model\Overseas;
+use app\admin\model\AdminMailLogs;
 
 use think\queue\Job;
+use think\Session;
 
-use email\SendMail;
-use app\admin\model\AdminMailLogs;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 
 class Hello {
@@ -18,7 +20,7 @@ class Hello {
        * @param array|mixed    $data     发布任务时自定义的数据
        */
       public function fire(Job $job,$data){
-        
+          
 
           $isJobDone = $this->doHelloJob($data);
         
@@ -33,7 +35,7 @@ class Hello {
   				        $job->delete();
                   // 也可以重新发布这个任务
                   //print("<info>Hello Job will be availabe again after 2s."."</info>\n");
-                  //$job->release(2); //$delay为延迟时间，表示该任务延迟2秒后再执行
+                  $job->release(2); //$delay为延迟时间，表示该任务延迟2秒后再执行
               }
           }
       }
@@ -44,36 +46,81 @@ class Hello {
        * @return boolean                 任务执行的结果
        */
       private function doHelloJob($data) {
-
-  		  // 根据消息中的数据进行实际的业务处理...
-        // $email = array_shift($data['email']);
-
-        $result = SendMail::send_email('875371257@qq.com', $data['subject'], $data['content']);
-        print_r($result);
-        if( $result['error'] == 1)
-        {
-          print_r('发送失败');
-        } else {
-          print_r('发送成功');
-        }
-        // if( $result['error'] == 1 ){
-
-        //     AdminMailLogs::create($param);
-        //     return false;
-        // }
-        // AdminMailLogs::create($param);
-        // return true;
-
-        // print_r($email);
-
-        // $model = new Overseas();
-
-        // foreach ($data['email'] as $k => $v) {
-
-        // }
         
-        return true;
+        // $res['address'] = $data['email'];
+        $res['subject'] = $data['subject'];
+        $res['content'] = $data['content'];
+
+        while ( true ) {
+            $overs = Overseas::where('status', 0)->order('id DESC')->find();
+            if(!$overs){
+                return true;
+            }
+            $send = $this->send_email( $overs['email'], $res['subject'], $res['content'] );
+            $overs['status']  = '2';
+
+            $res['address'] = $overs['email'];
+            $res['status'] = 1;
+            $overs->save();
+            AdminMailLogs::create($res);
+        }
+
+        // $result = $this->send_email('875371257@qq.com', $data['subject'], $data['content']);
+
+       
+
+        // if( $result )
+        // {
+        //   $res['status'] = 1;
+        //   AdminMailLogs::create($res);
+        //   return true;
+        // } else {
+        //   $res['status'] = 0;
+        //   AdminMailLogs::create($res);
+        //   return false;
+        // }
+
+
+
+
       }
+
+      public function send_email($to, $title, $content)
+      {
+
+        $mail = new phpmailer;
+        try {
+
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->CharSet="UTF-8";
+            $mail->Host = 'smtp.exmail.qq.com';  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = 'Chris@cspplaza.com';                 // SMTP username
+            $mail->Password = 'Plaza201805';                           // SMTP password
+            $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 465;                                    // TCP port to connect to
+            $mail->AddReplyTo("Chris@cspplaza.com","Chris@cspplaza.com");  //回复地址
+            $mail->setFrom('Chris@cspplaza.com');   //发信人
+            $mail->FromName = "zqshine";
+            $mail->addAddress($to);     // 收件人
+            //Content
+            $mail->Subject = $title;    //邮件标题
+            $mail->Body    = $content;  //邮箱内容    
+            $mail->isHTML(true);       // Set email format to HTML
+        
+            $res = $mail->send();
+
+            if($res){
+              return 1;
+            }else{
+              return 0;
+            }
+
+        } catch (Exception $e) {
+            return 0;
+        }
+      }
+
 
 
   }

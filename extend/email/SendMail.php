@@ -21,14 +21,10 @@ class SendMail
      */
     public static function send_email($address, $subject, $content, $attachment = [])
     {
-        // $email_smtp      = config('email_smtp'); 
-        // $email_username  = config('email_username');
-        // $email_password  = config('email_password');
-        // $email_from_name = config('email_from_name');
-        $email_smtp      = 'cspplaza'; 
-        $email_username  = 'smtp.exmail.qq.com';
-        $email_password  = 'Chris@cspplaza.com';
-        $email_from_name = 'Plaza201805';
+        $email_smtp      = config('email_smtp'); 
+        $email_username  = config('email_username');
+        $email_password  = config('email_password');
+        $email_from_name = config('email_from_name');
 
 
         if (empty($email_smtp) || empty($email_username) || empty($email_password) || empty($email_from_name)) {
